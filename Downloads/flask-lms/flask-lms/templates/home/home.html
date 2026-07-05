@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Flask LMS — Learn anything, anywhere{% endblock %}
+{% block content %}
+<div class="hero mb-5">
+  <div class="row align-items-center">
+    <div class="col-lg-8">
+      <h1 class="display-5 fw-bold">Learn new skills online with expert-led courses</h1>
+      <p class="lead mt-3">Video lessons, downloadable PDFs, quizzes, progress tracking, and an AI tutor that answers your questions 24/7.</p>
+      <a href="{{ url_for('courses.list_courses') }}" class="btn btn-light btn-lg mt-2"><i class="bi bi-collection-play"></i> Browse courses</a>
+      {% if not current_user.is_authenticated %}
+        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-light btn-lg mt-2 ms-2">Get started free</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<h3 class="mb-3">Latest courses</h3>
+<div class="row g-4">
+  {% for c in featured %}
+    <div class="col-md-4">
+      <div class="card card-course h-100 shadow-sm">
+        <div class="cover" style="{% if c.cover_url %}background-image:url('{{ c.cover_url }}'){% endif %}"></div>
+        <div class="card-body">
+          <span class="badge bg-secondary">{{ c.category }}</span>
+          <h5 class="card-title mt-2">{{ c.title }}</h5>
+          <p class="card-text text-muted small">{{ c.description[:110] }}{% if c.description|length > 110 %}…{% endif %}</p>
+          <a class="btn btn-sm btn-brand" href="{{ url_for('courses.detail', course_id=c.id) }}">View course</a>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="col-12"><div class="alert alert-info">No courses yet. Log in as admin to add some.</div></div>
+  {% endfor %}
+</div>
+{% endblock %}

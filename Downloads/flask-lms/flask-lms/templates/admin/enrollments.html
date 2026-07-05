@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Enrollments{% endblock %}
+{% block content %}
+<h3>All enrollments</h3>
+<div class="table-responsive"><table class="table table-sm">
+  <thead><tr><th>Student</th><th>Course</th><th>Progress</th><th>Enrolled</th></tr></thead>
+  <tbody>
+    {% for e in enrollments %}
+      <tr>
+        <td>{{ e.user.name }} <small class="text-muted">({{ e.user.email }})</small></td>
+        <td>{{ e.course.title }}</td>
+        <td><div class="progress" style="height:6px"><div class="progress-bar" style="width:{{ e.progress }}%"></div></div><small>{{ e.progress }}%</small></td>
+        <td>{{ e.enrolled_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      </tr>
+    {% else %}<tr><td colspan="4" class="text-muted text-center">No enrollments.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

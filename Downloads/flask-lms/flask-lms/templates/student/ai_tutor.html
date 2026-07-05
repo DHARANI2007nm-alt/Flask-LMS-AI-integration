@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}AI Tutor — {{ course.title }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h3 class="mb-0"><i class="bi bi-robot"></i> AI Tutor</h3>
+    <small class="text-muted">Course: {{ course.title }}</small>
+  </div>
+  <form method="post" action="{{ url_for('student.tutor_reset', course_id=course.id) }}"
+        data-confirm="Clear this conversation?">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-clockwise"></i> New chat</button>
+  </form>
+</div>
+
+<div id="chat-window" class="chat-window mb-3">
+  {% for m in history %}
+    <div class="chat-msg {{ m.role }}">{{ m.content }}</div>
+  {% else %}
+    <div class="text-muted">Ask anything about the course. Examples:
+      <em>“Explain the main concept in simple terms”</em>,
+      <em>“Give me a practice problem”</em>.
+    </div>
+  {% endfor %}
+</div>
+
+<div class="input-group">
+  <input id="tutor-input" class="form-control" placeholder="Type your question…" autofocus
+         onkeydown="if(event.key==='Enter'){document.getElementById('tutor-send').click();}">
+  <button id="tutor-send" class="btn btn-brand"
+          onclick="sendTutorMessage('{{ url_for('student.tutor_ask', course_id=course.id) }}','{{ csrf_token() }}')">
+    <i class="bi bi-send"></i> Ask
+  </button>
+</div>
+<small class="text-muted d-block mt-2">AI can make mistakes — verify important facts.</small>
+{% endblock %}

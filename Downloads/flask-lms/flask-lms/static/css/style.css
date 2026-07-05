@@ -1,0 +1,32 @@
+:root{
+  --brand:#4f46e5;
+  --brand-dark:#3730a3;
+  --bg:#f7f7fb;
+}
+body{background:var(--bg);}
+.navbar-brand{font-weight:700;letter-spacing:.3px;}
+.navbar-brand .logo-dot{color:var(--brand);}
+.btn-brand{background:var(--brand);border-color:var(--brand);color:#fff;}
+.btn-brand:hover{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff;}
+.text-brand{color:var(--brand);}
+.hero{
+  background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 100%);
+  color:#fff;border-radius:1rem;padding:3.5rem 2rem;
+}
+.card-course{transition:transform .15s ease, box-shadow .15s ease;}
+.card-course:hover{transform:translateY(-3px);box-shadow:0 .5rem 1.25rem rgba(0,0,0,.08);}
+.card-course .cover{
+  height:160px;background:#eee center/cover no-repeat;border-top-left-radius:.5rem;border-top-right-radius:.5rem;
+}
+.footer{background:#111827;color:#cbd5e1;padding:2rem 0;margin-top:4rem;}
+.footer a{color:#fff;text-decoration:none;}
+.badge-progress{background:#eef2ff;color:var(--brand);}
+
+/* AI tutor chat */
+.chat-window{
+  max-height:60vh;overflow-y:auto;background:#fff;border:1px solid #e5e7eb;border-radius:.75rem;padding:1rem;
+}
+.chat-msg{padding:.75rem 1rem;border-radius:.75rem;margin-bottom:.5rem;max-width:85%;white-space:pre-wrap;}
+.chat-msg.user{background:var(--brand);color:#fff;margin-left:auto;}
+.chat-msg.assistant{background:#f3f4f6;color:#111;margin-right:auto;}
+.chat-typing{color:#6b7280;font-style:italic;}

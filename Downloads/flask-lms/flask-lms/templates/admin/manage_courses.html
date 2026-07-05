@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Manage courses{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Manage courses</h3>
+  <a class="btn btn-brand" href="{{ url_for('admin.new_course') }}"><i class="bi bi-plus"></i> New course</a>
+</div>
+<div class="table-responsive"><table class="table table-hover align-middle">
+  <thead><tr><th>Title</th><th>Category</th><th>Materials</th><th>Quizzes</th><th class="text-end">Actions</th></tr></thead>
+  <tbody>
+    {% for c in courses %}
+      <tr>
+        <td>{{ c.title }}</td>
+        <td><span class="badge bg-secondary">{{ c.category }}</span></td>
+        <td>{{ c.materials|length }}</td>
+        <td>{{ c.quizzes|length }}</td>
+        <td class="text-end">
+          <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.manage_materials', course_id=c.id) }}"><i class="bi bi-book"></i></a>
+          <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.manage_quizzes', course_id=c.id) }}"><i class="bi bi-patch-question"></i></a>
+          <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin.edit_course', course_id=c.id) }}"><i class="bi bi-pencil"></i></a>
+          <form class="d-inline" method="post" action="{{ url_for('admin.delete_course', course_id=c.id) }}" data-confirm="Delete this course and everything in it?">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="text-center text-muted">No courses.</td></tr>
+    {% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

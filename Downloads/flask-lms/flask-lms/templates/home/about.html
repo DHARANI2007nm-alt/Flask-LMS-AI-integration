@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}About — Flask LMS{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-lg-8">
+  <h1>About us</h1>
+  <p class="lead">Flask LMS is a lightweight learning platform built to demonstrate modern full-stack Python development.</p>
+  <p>Features include role-based auth, course management, PDF & YouTube materials, quizzes, progress tracking, plus AI-powered tutoring and quiz generation.</p>
+  <h4 class="mt-4">Tech stack</h4>
+  <ul>
+    <li>Python Flask + Jinja2</li>
+    <li>SQLite via SQLAlchemy ORM</li>
+    <li>Flask-Login for sessions, Flask-WTF for forms/CSRF</li>
+    <li>Bootstrap 5 for a responsive UI</li>
+    <li>OpenAI-compatible API for AI tutor & quiz generation</li>
+  </ul>
+</div></div>
+{% endblock %}

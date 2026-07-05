@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-8">
+    {% if course.cover_url %}<img src="{{ course.cover_url }}" class="img-fluid rounded mb-3" alt="">{% endif %}
+    <span class="badge bg-secondary">{{ course.category }}</span>
+    <h2 class="mt-2">{{ course.title }}</h2>
+    <p class="lead">{{ course.description }}</p>
+
+    <h5 class="mt-4"><i class="bi bi-collection"></i> What's inside</h5>
+    <ul>
+      <li>{{ course.materials|length }} learning material(s)</li>
+      <li>{{ course.quizzes|length }} quiz(zes)</li>
+    </ul>
+  </div>
+  <div class="col-lg-4">
+    <div class="card shadow-sm"><div class="card-body">
+      {% if current_user.is_authenticated %}
+        {% if enrolled %}
+          <div class="alert alert-success mb-2"><i class="bi bi-check-circle"></i> You are enrolled.</div>
+          <a class="btn btn-brand w-100 mb-2" href="{{ url_for('student.materials', course_id=course.id) }}">
+            <i class="bi bi-book"></i> Open materials
+          </a>
+          <a class="btn btn-outline-primary w-100" href="{{ url_for('student.tutor', course_id=course.id) }}">
+            <i class="bi bi-robot"></i> Ask AI Tutor
+          </a>
+        {% else %}
+          <form method="post" action="{{ url_for('student.enroll', course_id=course.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-brand w-100"><i class="bi bi-plus-circle"></i> Enroll now</button>
+          </form>
+        {% endif %}
+      {% else %}
+        <a class="btn btn-brand w-100" href="{{ url_for('auth.login') }}">Log in to enroll</a>
+      {% endif %}
+
+      {% if course.quizzes %}
+        <hr>
+        <h6>Quizzes</h6>
+        <ul class="list-unstyled mb-0">
+          {% for q in course.quizzes %}
+            <li class="d-flex justify-content-between align-items-center py-1">
+              <span><i class="bi bi-patch-question"></i> {{ q.title }}</span>
+              {% if current_user.is_authenticated and (enrolled or current_user.is_admin) %}
+                <a class="btn btn-sm btn-outline-primary" href="{{ url_for('quizzes.take', quiz_id=q.id) }}">Take</a>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div></div>
+  </div>
+</div>
+{% endblock %}

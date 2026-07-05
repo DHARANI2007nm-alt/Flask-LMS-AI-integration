@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}My dashboard{% endblock %}
+{% block content %}
+<h3>Hello, {{ current_user.name.split()[0] }} 👋</h3>
+<p class="text-muted">Track your enrolled courses and quiz history.</p>
+
+<div class="row g-4 mt-2">
+  <div class="col-lg-8">
+    <h5>My courses</h5>
+    <div class="row g-3">
+      {% for e in enrollments %}
+        <div class="col-md-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h6 class="mb-1">{{ e.course.title }}</h6>
+              <div class="progress my-2" style="height:8px">
+                <div class="progress-bar" style="width: {{ e.progress }}%"></div>
+              </div>
+              <small class="text-muted">Progress: {{ e.progress }}%</small><br>
+              <a class="btn btn-sm btn-brand mt-2" href="{{ url_for('student.materials', course_id=e.course.id) }}">Continue</a>
+              <a class="btn btn-sm btn-outline-primary mt-2" href="{{ url_for('student.tutor', course_id=e.course.id) }}"><i class="bi bi-robot"></i> AI Tutor</a>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="col-12"><div class="alert alert-info">You aren't enrolled in any course yet. <a href="{{ url_for('courses.list_courses') }}">Browse courses</a>.</div></div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <h5>Recent quiz results</h5>
+    <ul class="list-group">
+      {% for r in recent_results %}
+        <li class="list-group-item d-flex justify-content-between">
+          <span>{{ r.quiz.title }}</span>
+          <span class="badge bg-primary">{{ r.score }}/{{ r.total }} · {{ r.percent }}%</span>
+        </li>
+      {% else %}
+        <li class="list-group-item text-muted">No attempts yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

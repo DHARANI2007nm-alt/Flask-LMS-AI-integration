@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}{{ course.title }} — Materials{% endblock %}
+{% block content %}
+<h3>{{ course.title }}</h3>
+<p class="text-muted">Learning materials</p>
+
+<div class="row g-3">
+  {% for m in course.materials %}
+    <div class="col-md-6">
+      <div class="card shadow-sm h-100"><div class="card-body">
+        <h6>{{ m.title }}</h6>
+        {% if m.kind == "video" and m.youtube_url %}
+          {% set vid = m.youtube_url.split('v=')[-1].split('&')[0].split('/')[-1] %}
+          <div class="ratio ratio-16x9 mb-2">
+            <iframe src="https://www.youtube.com/embed/{{ vid }}" allowfullscreen></iframe>
+          </div>
+        {% elif m.kind == "pdf" and m.file_name %}
+          <a class="btn btn-outline-primary" href="{{ url_for('student.download', filename=m.file_name) }}">
+            <i class="bi bi-file-earmark-pdf"></i> Download PDF
+          </a>
+        {% endif %}
+      </div></div>
+    </div>
+  {% else %}
+    <div class="col-12"><div class="alert alert-info">No materials yet.</div></div>
+  {% endfor %}
+</div>
+
+{% if course.quizzes %}
+  <h5 class="mt-4">Quizzes</h5>
+  <ul class="list-group mb-3">
+    {% for q in course.quizzes %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ q.title }}
+        <a class="btn btn-sm btn-brand" href="{{ url_for('quizzes.take', quiz_id=q.id) }}">Take quiz</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% if enrollment %}
+<div class="card mt-4"><div class="card-body">
+  <form method="post" action="{{ url_for('student.set_progress', course_id=course.id) }}" class="row g-2 align-items-center">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="col-auto"><label class="form-label mb-0">Update my progress:</label></div>
+    <div class="col"><input type="range" min="0" max="100" step="5" name="progress" value="{{ enrollment.progress }}" class="form-range" oninput="this.nextElementSibling.textContent=this.value+'%'"></div>
+    <div class="col-auto"><span class="badge badge-progress">{{ enrollment.progress }}%</span></div>
+    <div class="col-auto"><button class="btn btn-sm btn-brand">Save</button></div>
+  </form>
+</div></div>
+{% endif %}
+
+<a class="btn btn-outline-primary mt-3" href="{{ url_for('student.tutor', course_id=course.id) }}"><i class="bi bi-robot"></i> Ask AI Tutor about this course</a>
+{% endblock %}

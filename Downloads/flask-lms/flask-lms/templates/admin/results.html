@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Quiz results{% endblock %}
+{% block content %}
+<h3>All quiz results</h3>
+<div class="table-responsive"><table class="table table-sm">
+  <thead><tr><th>Student</th><th>Quiz</th><th>Score</th><th>Taken</th></tr></thead>
+  <tbody>
+    {% for r in results %}
+      <tr>
+        <td>{{ r.user.name }}</td>
+        <td>{{ r.quiz.title }} <small class="text-muted">({{ r.quiz.course.title }})</small></td>
+        <td><span class="badge bg-primary">{{ r.score }}/{{ r.total }} · {{ r.percent }}%</span></td>
+        <td>{{ r.taken_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      </tr>
+    {% else %}<tr><td colspan="4" class="text-muted text-center">No attempts yet.</td></tr>{% endfor %}
+  </tbody>
+</table></div>
+{% endblock %}

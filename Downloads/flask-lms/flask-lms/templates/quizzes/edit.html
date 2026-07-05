@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Edit quiz — {{ quiz.title }}{% endblock %}
+{% block content %}
+<h3>Edit quiz: {{ quiz.title }}</h3>
+<p class="text-muted">Course: {{ quiz.course.title }}</p>
+
+<div class="row g-4">
+  <div class="col-lg-6">
+    <div class="card shadow-sm"><div class="card-body">
+      <h5><i class="bi bi-robot text-brand"></i> Generate with AI</h5>
+      <p class="small text-muted">Provide a topic and the AI will draft multiple-choice questions.</p>
+      <form method="post" action="{{ url_for('admin.ai_generate_quiz', quiz_id=quiz.id) }}" novalidate>
+        {{ aiform.hidden_tag() }}
+        <div class="mb-2">{{ aiform.topic.label(class="form-label") }} {{ aiform.topic(class="form-control", placeholder="e.g. Python list comprehensions") }}</div>
+        <div class="row g-2">
+          <div class="col">{{ aiform.num_questions.label(class="form-label") }} {{ aiform.num_questions(class="form-control", min=1, max=15) }}</div>
+          <div class="col">{{ aiform.difficulty.label(class="form-label") }} {{ aiform.difficulty(class="form-select") }}</div>
+        </div>
+        {{ aiform.submit(class="btn btn-brand mt-3") }}
+      </form>
+    </div></div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card shadow-sm"><div class="card-body">
+      <h5>Add question manually</h5>
+      <form method="post" novalidate>
+        {{ qform.hidden_tag() }}
+        <div class="mb-2">{{ qform.text.label(class="form-label") }} {{ qform.text(class="form-control", rows=2) }}</div>
+        <div class="row g-2">
+          <div class="col-6">{{ qform.option_a.label(class="form-label") }} {{ qform.option_a(class="form-control") }}</div>
+          <div class="col-6">{{ qform.option_b.label(class="form-label") }} {{ qform.option_b(class="form-control") }}</div>
+          <div class="col-6">{{ qform.option_c.label(class="form-label") }} {{ qform.option_c(class="form-control") }}</div>
+          <div class="col-6">{{ qform.option_d.label(class="form-label") }} {{ qform.option_d(class="form-control") }}</div>
+        </div>
+        <div class="mt-2">{{ qform.correct_index.label(class="form-label") }} {{ qform.correct_index(class="form-select") }}</div>
+        {{ qform.submit(class="btn btn-outline-primary mt-2") }}
+      </form>
+    </div></div>
+  </div>
+</div>
+
+<h5 class="mt-4">Questions ({{ quiz.questions|length }})</h5>
+<ol class="list-group list-group-numbered">
+  {% for q in quiz.questions %}
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2">
+        <div class="fw-bold">{{ q.text }}</div>
+        <ul class="mb-0 small">
+          {% for opt in q.options %}
+            <li {% if loop.index0 == q.correct_index %}class="text-success fw-bold"{% endif %}>
+              {{ opt }} {% if loop.index0 == q.correct_index %}✓{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <form method="post" action="{{ url_for('admin.delete_question', qid=q.id) }}" data-confirm="Delete question?">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+      </form>
+    </li>
+  {% else %}<li class="list-group-item text-muted">No questions yet.</li>{% endfor %}
+</ol>
+{% endblock %}

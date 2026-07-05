@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Quiz result{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-md-6">
+  <div class="card text-center shadow-sm"><div class="card-body p-4">
+    <h3>{{ r.quiz.title }}</h3>
+    <p class="text-muted">{{ r.quiz.course.title }}</p>
+    <div class="display-3 fw-bold text-brand">{{ r.percent }}%</div>
+    <p class="lead">You got <strong>{{ r.score }} / {{ r.total }}</strong> correct.</p>
+    <p>
+      {% if r.percent >= 80 %}🎉 Excellent!
+      {% elif r.percent >= 50 %}👍 Good effort — review and try again.
+      {% else %}💪 Keep studying — you'll get it next time.{% endif %}
+    </p>
+    <a class="btn btn-brand" href="{{ url_for('courses.detail', course_id=r.quiz.course_id) }}">Back to course</a>
+    <a class="btn btn-outline-primary" href="{{ url_for('quizzes.take', quiz_id=r.quiz_id) }}">Retake</a>
+  </div></div>
+</div></div>
+{% endblock %}

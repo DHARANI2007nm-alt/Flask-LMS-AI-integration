@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Quizzes — {{ course.title }}{% endblock %}
+{% block content %}
+<h3>Quizzes · {{ course.title }}</h3>
+
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="card shadow-sm"><div class="card-body">
+      <h5>New quiz</h5>
+      <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-2">{{ form.title.label(class="form-label") }} {{ form.title(class="form-control") }}</div>
+        {{ form.submit(class="btn btn-brand") }}
+      </form>
+      <small class="text-muted d-block mt-2">After creating, you can add questions manually or generate them with AI.</small>
+    </div></div>
+  </div>
+  <div class="col-lg-7">
+    <h5>Existing quizzes</h5>
+    <ul class="list-group">
+      {% for q in course.quizzes %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>{{ q.title }} <small class="text-muted">· {{ q.questions|length }} question(s)</small></span>
+          <span>
+            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.edit_quiz', quiz_id=q.id) }}"><i class="bi bi-pencil"></i> Edit</a>
+            <form class="d-inline" method="post" action="{{ url_for('admin.delete_quiz', quiz_id=q.id) }}" data-confirm="Delete this quiz?">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </span>
+        </li>
+      {% else %}<li class="list-group-item text-muted">No quizzes yet.</li>{% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

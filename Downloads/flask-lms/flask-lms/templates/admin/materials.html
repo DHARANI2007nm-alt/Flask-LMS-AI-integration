@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Materials — {{ course.title }}{% endblock %}
+{% block content %}
+<h3>Materials · {{ course.title }}</h3>
+<a class="btn btn-outline-primary btn-sm mb-3" href="{{ url_for('admin.manage_quizzes', course_id=course.id) }}"><i class="bi bi-patch-question"></i> Manage quizzes</a>
+
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="card shadow-sm"><div class="card-body">
+      <h5>Add material</h5>
+      <form method="post" enctype="multipart/form-data" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-2">{{ form.title.label(class="form-label") }} {{ form.title(class="form-control") }}</div>
+        <div class="mb-2">{{ form.kind.label(class="form-label") }} {{ form.kind(class="form-select") }}</div>
+        <div class="mb-2">{{ form.pdf_file.label(class="form-label") }} {{ form.pdf_file(class="form-control") }}</div>
+        <div class="mb-2">{{ form.youtube_url.label(class="form-label") }} {{ form.youtube_url(class="form-control", placeholder="https://youtube.com/watch?v=…") }}</div>
+        {{ form.submit(class="btn btn-brand") }}
+      </form>
+    </div></div>
+  </div>
+  <div class="col-lg-7">
+    <h5>Existing</h5>
+    <ul class="list-group">
+      {% for m in course.materials %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <span>
+            {% if m.kind == 'pdf' %}<i class="bi bi-file-earmark-pdf"></i>{% else %}<i class="bi bi-youtube"></i>{% endif %}
+            {{ m.title }}
+          </span>
+          <form method="post" action="{{ url_for('admin.delete_material', material_id=m.id) }}" data-confirm="Delete this material?">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </li>
+      {% else %}<li class="list-group-item text-muted">Nothing yet.</li>{% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

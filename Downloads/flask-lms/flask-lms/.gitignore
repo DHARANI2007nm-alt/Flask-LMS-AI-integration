@@ -1,0 +1,15 @@
+# Environment variables
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# App runtime
+database/*.db
+uploads/*
+!uploads/.gitkeep
+
+# IDE
+.vscode/
+.idea/
