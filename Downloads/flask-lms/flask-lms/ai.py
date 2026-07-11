@@ -50,7 +50,7 @@ def _chat(messages: list[dict], *, temperature: float = 0.4,
         r = requests.post(
             f"{cfg['base']}/chat/completions",
             headers={
-                "Authorization": f"Bearer {cfg['key']}",
+                "Authorization": f"Bearer {cfg['key'].strip()}",
                 "Content-Type": "application/json",
             },
             json=payload,
