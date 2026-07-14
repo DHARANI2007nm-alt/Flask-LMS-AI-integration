@@ -31,8 +31,8 @@ class Config:
 
     # --- AI (OpenAI-compatible endpoint) ---
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
-    OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
-    OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
+    OPENAI_BASE_URL = "https://api.groq.com/openai/v1"
+    OPENAI_MODEL = "llama-3.3-70b-versatile"
 
     # --- Default admin (seeded on first run) ---
     DEFAULT_ADMIN_EMAIL = "admin@gmail.com"
